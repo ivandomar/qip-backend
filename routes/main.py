@@ -7,4 +7,4 @@ main_blueprint = Blueprint("main", __name__)
 
 home_tag = Tag(name="Documentação", description="Seleção de documentação: Swagger, Redoc ou RapiDoc")
 
-main_blueprint.route('/')(index)
+main_blueprint.route("/")(index)

@@ -7,4 +7,4 @@ element_blueprint = Blueprint("element", __name__, url_prefix="/element")
 
 element_tag = Tag(name="Element", description="CRUD of qip elements (notes and folders)")
 
-element_blueprint.route('/')(index)
+element_blueprint.route("/")(index)
