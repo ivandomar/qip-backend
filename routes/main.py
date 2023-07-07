@@ -1,10 +1,9 @@
-from flask import Blueprint
-from flask_openapi3 import Tag
+from flask_openapi3 import APIBlueprint, Tag
 
 from controllers.home import index
 
-main_blueprint = Blueprint("main", __name__)
+home_tag = Tag(name="Documentation", description="Seleção de documentação: Swagger, Redoc ou RapiDoc")
 
-home_tag = Tag(name="Documentação", description="Seleção de documentação: Swagger, Redoc ou RapiDoc")
+main_blueprint = APIBlueprint("main", __name__)
 
-main_blueprint.route("/")(index)
+main_blueprint.get("/", tags=[home_tag], summary="Renders Swagger API docs")(index)

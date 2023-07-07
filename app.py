@@ -10,5 +10,5 @@ app = OpenAPI(__name__, info=info)
 
 CORS(app)
 
-app.register_blueprint(main_blueprint)
-app.register_blueprint(element_blueprint)
+app.register_api(main_blueprint)
+app.register_api(element_blueprint)
