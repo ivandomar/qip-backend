@@ -1,14 +1,11 @@
-from flask import redirect
 from flask_cors import CORS
-from flask_openapi3 import OpenAPI, Info, Tag
+from flask_openapi3 import OpenAPI, Info
 from urllib.parse import unquote
+
+from routes.main import main_blueprint
 
 info = Info(title="qip api", version="0.0.1")
 app = OpenAPI(__name__, info=info)
 CORS(app)
 
-home_tag = Tag(name="Documentation", description="Documentation utilitary")
-
-@app.get('/', tags=[home_tag], summary="Shows API doc")
-def home():
-    return redirect('/openapi/swagger')
+app.register_blueprint(main_blueprint)
