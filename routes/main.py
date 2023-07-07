@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect
+from flask import Blueprint
 
 from controllers.home import index
 
