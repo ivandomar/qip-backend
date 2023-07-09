@@ -12,10 +12,9 @@ def add_element(form: NewElementRequestSchema):
     new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
     
     try:
+        # TODO: check if element title already exists in its folder, throw an error if positive
         session = Session()
-        
         session.add(new_element)
-        
         session.commit()
         
         return format_element_response(new_element), OK
