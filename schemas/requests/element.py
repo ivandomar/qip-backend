@@ -1,6 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import List
 
+# TODO: cross validate content against element type
 class NewElementRequestSchema(BaseModel):
     title: str
     content: str
