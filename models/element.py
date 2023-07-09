@@ -20,7 +20,7 @@ class Element(Base):
 
     children = relationship("Element")
 
-    def __init__(self, title:str, content:int, element_type_id:int, parent_id:int):
+    def __init__(self, title:str, content:str, element_type_id:int, parent_id:int):
         self.title = title
         self.content = content
         self.element_type_id = element_type_id
