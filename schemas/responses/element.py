@@ -8,6 +8,7 @@ class RemoveElementResponseSchema(BaseModel):
     mesage: str
 
 class ElementResponseSchema(BaseModel):
+    id: int
     title: str
     content: str
     element_type_id: int
