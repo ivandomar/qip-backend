@@ -1,7 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional, List
-from models.element import Element
+from typing import List
 
 
 class RemoveElementResponseSchema(BaseModel):
