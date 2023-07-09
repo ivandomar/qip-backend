@@ -3,6 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from constants.error_messages import DUPLICATED_ELEMENT, GENERAL_ERROR
 from constants.http_statuses import OK, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
+from formatters.element import format_element_response
 from models.element import Element
 from schemas.requests.element import NewElementRequestSchema
 
@@ -17,8 +18,7 @@ def add_element(form: NewElementRequestSchema):
         
         session.commit()
         
-        # TODO: format object before responsing
-        return new_element, OK
+        return format_element_response(new_element), OK
 
     except IntegrityError as e:
         return {"mesage": DUPLICATED_ELEMENT}, SEMANTIC_ERROR
