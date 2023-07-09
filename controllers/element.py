@@ -1,5 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 
+from constants.error_messages import DUPLICATED_ELEMENT, GENERAL_ERROR
+from constants.http_statuses import OK, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
 from models.element import Element
 from schemas.requests.element import NewElementRequestSchema
@@ -16,14 +18,12 @@ def add_element(form: NewElementRequestSchema):
         session.commit()
         
         # TODO: format object before responsing
-        return new_element, 200
+        return new_element, OK
 
     except IntegrityError as e:
-        error_msg = 'Element title already exists in this folder'
-
-        return {"mesage": error_msg}, 409
+        return {"mesage": DUPLICATED_ELEMENT}, SEMANTIC_ERROR
 
     except Exception as e:
-        error_msg = "Não foi possível salvar novo item :/"
+        error_msg = "Could not process this request"
         
-        return {"mesage": error_msg}, 400
+        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
