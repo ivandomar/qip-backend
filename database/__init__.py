@@ -20,8 +20,8 @@ Session = sessionmaker(engine)
 if not database_exists(engine.url):
     create_database(engine.url) 
 
-Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
-seeding_session = Session()
-seeding_session.add_all(element_type_seeder)
-seeding_session.commit()
+    seeding_session = Session()
+    seeding_session.add_all(element_type_seeder)
+    seeding_session.commit()
