@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 import os
 
-from .models import Base, Element, ElementType
+from models import Base, Element, ElementType
 
 db_path = "database/data"
 
