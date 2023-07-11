@@ -1,7 +1,7 @@
 from flask_openapi3 import APIBlueprint, Tag
 
 from constants.http_statuses import OK, SEMANTIC_ERROR, SYNTAX_ERROR
-from controllers.element import add_element
+from controllers.element import add, get, get_by_folder, remove
 from schemas.responses.element import ElementResponseSchema, ElementListResponseSchema
 from schemas.responses.general import ErrorResponseSchema
 
@@ -18,7 +18,7 @@ element_blueprint.get(
         str(SEMANTIC_ERROR): ErrorResponseSchema,
         str(SYNTAX_ERROR): ErrorResponseSchema
         }
-)
+)(get)
 
 element_blueprint.get(
     '/<id>/elements',
@@ -29,7 +29,7 @@ element_blueprint.get(
         str(SEMANTIC_ERROR): ErrorResponseSchema,
         str(SYNTAX_ERROR): ErrorResponseSchema
         }
-)
+)(get_by_folder)
 
 element_blueprint.delete(
     '/<id>',
@@ -40,7 +40,7 @@ element_blueprint.delete(
         str(SEMANTIC_ERROR): ErrorResponseSchema,
         str(SYNTAX_ERROR): ErrorResponseSchema
         }
-)
+)(remove)
 
 element_blueprint.post(
     '/',
@@ -51,4 +51,4 @@ element_blueprint.post(
         str(SEMANTIC_ERROR): ErrorResponseSchema,
         str(SYNTAX_ERROR): ErrorResponseSchema
         }
-)(add_element)
+)(add)

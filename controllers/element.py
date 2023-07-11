@@ -9,7 +9,7 @@ from schemas.requests.element import GetElementRequestSchema, ListElementRequest
 
 from datetime import datetime
 
-def add_element(form: NewElementRequestSchema):
+def add(form: NewElementRequestSchema):
     new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
     
     try:
@@ -22,22 +22,6 @@ def add_element(form: NewElementRequestSchema):
 
     except IntegrityError as e:
         return {"mesage": DUPLICATED_ELEMENT}, SEMANTIC_ERROR
-
-    except Exception as e:
-        error_msg = "Could not process this request"
-        
-        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
-    
-
-def delete(form: RemoveElementRequestSchema):
-    id = form.id
-    
-    try:
-        session = Session()
-        elements = session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
-        session.commit()
-        
-        return None, OK
 
     except Exception as e:
         error_msg = "Could not process this request"
@@ -68,6 +52,22 @@ def get(form: GetElementRequestSchema):
         elements = session.query(Element).filter(Element.id == id, Element.deleted_at == None).one()
         
         return format_element_response(elements), OK
+
+    except Exception as e:
+        error_msg = "Could not process this request"
+        
+        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
+    
+
+def remove(form: RemoveElementRequestSchema):
+    id = form.id
+    
+    try:
+        session = Session()
+        elements = session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
+        session.commit()
+        
+        return None, OK
 
     except Exception as e:
         error_msg = "Could not process this request"

@@ -2,7 +2,7 @@ from flask_openapi3 import APIBlueprint, Tag
 
 from controllers.home import index
 
-home_tag = Tag(name="Documentation", description="Seleção de documentação: Swagger, Redoc ou RapiDoc")
+home_tag = Tag(name="Documentation", description="Documentation suite")
 
 main_blueprint = APIBlueprint("main", __name__)
 
