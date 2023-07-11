@@ -37,9 +37,6 @@ def get_by_folder(form: ListElementRequestSchema):
         
         return format_element_list_response(elements), OK
 
-    except IntegrityError as e:
-        return {"mesage": DUPLICATED_ELEMENT}, SEMANTIC_ERROR
-
     except Exception as e:
         error_msg = "Could not process this request"
         
