@@ -28,9 +28,7 @@ def add(form: NewElementRequestSchema):
     except IntegrityError as e:
         return {"mesage": str(e)}, SEMANTIC_ERROR
 
-    except Exception as e:
-        error_msg = "Could not process this request"
-        
+    except Exception as e:        
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
 
@@ -43,9 +41,7 @@ def get_by_folder(form: ListElementRequestSchema):
         
         return format_element_list_response(elements), OK
 
-    except Exception as e:
-        error_msg = "Could not process this request"
-        
+    except Exception as e:        
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
 
@@ -58,9 +54,7 @@ def get(form: GetElementRequestSchema):
         
         return format_element_response(elements), OK
 
-    except Exception as e:
-        error_msg = "Could not process this request"
-        
+    except Exception as e:        
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
 
@@ -69,12 +63,10 @@ def remove(form: RemoveElementRequestSchema):
     
     try:
         session = Session()
-        elements = session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
+        session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
         session.commit()
         
         return None, OK
 
-    except Exception as e:
-        error_msg = "Could not process this request"
-        
+    except Exception as e:        
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
