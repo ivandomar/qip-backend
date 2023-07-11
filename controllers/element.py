@@ -50,7 +50,7 @@ def get_by_folder(form: ListElementRequestSchema):
     
     try:
         session = Session()
-        elements = session.query(Element).filter(Element.parent_id == parent_id).all()
+        elements = session.query(Element).filter(Element.parent_id == parent_id, Element.deleted_at == None).all()
         
         return format_element_list_response(elements), OK
 
@@ -65,7 +65,7 @@ def get(form: GetElementRequestSchema):
     
     try:
         session = Session()
-        elements = session.query(Element).filter(Element.id == id).one()
+        elements = session.query(Element).filter(Element.id == id, Element.deleted_at == None).one()
         
         return format_element_response(elements), OK
 
