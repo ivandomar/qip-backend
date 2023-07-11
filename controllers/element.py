@@ -13,15 +13,20 @@ def add(form: NewElementRequestSchema):
     new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
     
     try:
-        # TODO: check if element title already exists in its folder, throw an error if positive
         session = Session()
+        
+        matching_element = session.query(Element).filter(Element.parent_id == new_element.parent_id, Element.title == new_element.title).first()
+
+        if matching_element is None:
+            raise IntegrityError(DUPLICATED_ELEMENT)
+
         session.add(new_element)
         session.commit()
         
         return format_element_response(new_element), CREATED
 
     except IntegrityError as e:
-        return {"mesage": DUPLICATED_ELEMENT}, SEMANTIC_ERROR
+        return {"mesage": str(e)}, SEMANTIC_ERROR
 
     except Exception as e:
         error_msg = "Could not process this request"
