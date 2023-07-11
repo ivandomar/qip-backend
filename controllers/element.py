@@ -5,7 +5,7 @@ from constants.http_statuses import OK, CREATED, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
 from formatters.element import format_element_response, format_element_list_response
 from models.element import Element
-from schemas.requests.element import NewElementRequestSchema, ListElementRequestSchema
+from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema
 
 
 def add_element(form: NewElementRequestSchema):
@@ -33,7 +33,7 @@ def get_by_folder(form: ListElementRequestSchema):
     
     try:
         session = Session()
-        elements = session.query(Element).filter(Element.parent_id == parent_id).first()
+        elements = session.query(Element).filter(Element.parent_id == parent_id).all()
         
         return format_element_list_response(elements), OK
 
