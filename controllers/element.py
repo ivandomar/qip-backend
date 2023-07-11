@@ -5,8 +5,9 @@ from constants.http_statuses import OK, CREATED, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
 from formatters.element import format_element_response, format_element_list_response
 from models.element import Element
-from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema
+from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema, RemoveElementRequestSchema
 
+from datetime import datetime
 
 def add_element(form: NewElementRequestSchema):
     new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
@@ -28,6 +29,22 @@ def add_element(form: NewElementRequestSchema):
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
 
+def delete(form: RemoveElementRequestSchema):
+    id = form.id
+    
+    try:
+        session = Session()
+        elements = session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
+        session.commit()
+        
+        return None, OK
+
+    except Exception as e:
+        error_msg = "Could not process this request"
+        
+        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
+    
+
 def get_by_folder(form: ListElementRequestSchema):
     parent_id = form.parent_id
     
@@ -42,6 +59,7 @@ def get_by_folder(form: ListElementRequestSchema):
         
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
+
 def get(form: GetElementRequestSchema):
     id = form.id
     
