@@ -15,7 +15,10 @@ def add(form: NewElementRequestSchema):
     try:
         session = Session()
         
-        matching_element = session.query(Element).filter(Element.parent_id == new_element.parent_id, Element.title == new_element.title).first()
+        matching_element = session.query(Element).filter(
+            Element.parent_id == new_element.parent_id,
+            Element.title == new_element.title
+        ).first()
 
         if matching_element is None:
             raise IntegrityError(DUPLICATED_ELEMENT)
@@ -37,7 +40,10 @@ def get_by_folder(form: ListElementRequestSchema):
     
     try:
         session = Session()
-        elements = session.query(Element).filter(Element.parent_id == parent_id, Element.deleted_at == None).all()
+        elements = session.query(Element).filter(
+            Element.parent_id == parent_id,
+            Element.deleted_at == None
+        ).all()
         
         return format_element_list_response(elements), OK
 
@@ -50,7 +56,10 @@ def get(form: GetElementRequestSchema):
     
     try:
         session = Session()
-        elements = session.query(Element).filter(Element.id == id, Element.deleted_at == None).one()
+        elements = session.query(Element).filter(
+            Element.id == id,
+            Element.deleted_at == None
+        ).one()
         
         return format_element_response(elements), OK
 
