@@ -41,3 +41,17 @@ def get_by_folder(form: ListElementRequestSchema):
         error_msg = "Could not process this request"
         
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
+    
+def get(form: GetElementRequestSchema):
+    id = form.id
+    
+    try:
+        session = Session()
+        elements = session.query(Element).filter(Element.id == id).one()
+        
+        return format_element_response(elements), OK
+
+    except Exception as e:
+        error_msg = "Could not process this request"
+        
+        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
