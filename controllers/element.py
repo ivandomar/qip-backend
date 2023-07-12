@@ -28,6 +28,7 @@ def add(form: NewElementRequestSchema):
 
         session.add(new_element)
         session.commit()
+        session.close()
         
         return format_element_response(new_element), CREATED
 
@@ -44,15 +45,18 @@ def get_by_folder(form: ListElementRequestSchema):
     try:
         session = Session()
 
-        parent = session.query(Element).filter(Element.id == parent_id).one_or_none()
+        if parent_id is not None:
+            parent = session.query(Element).filter(Element.id == parent_id).one_or_none()
 
-        if parent is None:
-            raise ValueError(FOLDER_NOT_FOUND)
+            if parent is None:
+                raise ValueError(FOLDER_NOT_FOUND)
 
         elements = session.query(Element).filter(
             Element.parent_id == parent_id,
             Element.deleted_at == None
         ).all()
+
+        session.close()
         
         return format_element_list_response(elements), OK
 
@@ -72,6 +76,8 @@ def get(form: GetElementRequestSchema):
             Element.id == id,
             Element.deleted_at == None
         ).one()
+
+        session.close()
         
         return format_element_response(elements), OK
 
@@ -86,6 +92,7 @@ def remove(form: RemoveElementRequestSchema):
         session = Session()
         session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
         session.commit()
+        session.close()
         
         return None, OK
 
