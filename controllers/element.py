@@ -1,5 +1,3 @@
-from sqlalchemy.exc import IntegrityError
-
 from constants.error_messages import DUPLICATED_ELEMENT, FOLDER_NOT_FOUND, GENERAL_ERROR
 from constants.http_statuses import OK, CREATED, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
@@ -18,7 +16,7 @@ def add(form: NewElementRequestSchema):
         parent = session.query(Element).filter(Element.id == form.parent_id).one_or_none()
 
         if parent is None:
-            raise IntegrityError(FOLDER_NOT_FOUND)
+            raise ValueError(FOLDER_NOT_FOUND)
         
         matching_element = session.query(Element).filter(
             Element.parent_id == new_element.parent_id,
@@ -26,14 +24,14 @@ def add(form: NewElementRequestSchema):
         ).first()
 
         if matching_element is None:
-            raise IntegrityError(DUPLICATED_ELEMENT)
+            raise AttributeError(DUPLICATED_ELEMENT)
 
         session.add(new_element)
         session.commit()
         
         return format_element_response(new_element), CREATED
 
-    except IntegrityError as e:
+    except (AttributeError, ValueError) as e:
         return {"mesage": str(e)}, SEMANTIC_ERROR
 
     except Exception as e:        
@@ -49,7 +47,7 @@ def get_by_folder(form: ListElementRequestSchema):
         parent = session.query(Element).filter(Element.id == parent_id).one_or_none()
 
         if parent is None:
-            raise IntegrityError(FOLDER_NOT_FOUND)
+            raise ValueError(FOLDER_NOT_FOUND)
 
         elements = session.query(Element).filter(
             Element.parent_id == parent_id,
@@ -58,11 +56,11 @@ def get_by_folder(form: ListElementRequestSchema):
         
         return format_element_list_response(elements), OK
 
-    except IntegrityError as e:
+    except ValueError as e:
         return {"mesage": str(e)}, SEMANTIC_ERROR
 
     except Exception as e:        
-        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
+        return {"mesage": str(e)}, SYNTAX_ERROR
     
 
 def get(form: GetElementRequestSchema):
