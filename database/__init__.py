@@ -15,7 +15,7 @@ db_url = f'sqlite:///{db_path}/qip.sqlite3'
 
 engine = create_engine(db_url, echo=True)
 
-Session = sessionmaker(engine)
+Session = sessionmaker(engine, expire_on_commit=False)
 
 if not database_exists(engine.url):
     create_database(engine.url) 
