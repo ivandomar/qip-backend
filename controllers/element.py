@@ -1,4 +1,4 @@
-from constants.error_messages import DUPLICATED_ELEMENT, FOLDER_NOT_FOUND, GENERAL_ERROR
+from constants.error_messages import DUPLICATED_ELEMENT, FOLDER_NOT_FOUND, GENERAL_ERROR, REQUIRED_CONTENT
 from constants.http_statuses import OK, CREATED, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
 from formatters.element import format_element_response, format_element_list_response
@@ -6,6 +6,7 @@ from models.element import Element
 from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema, RemoveElementRequestSchema
 
 from datetime import datetime
+from flask import request
 
 def add(form: NewElementRequestSchema):
     new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
@@ -13,10 +14,14 @@ def add(form: NewElementRequestSchema):
     try:
         session = Session()
 
-        parent = session.query(Element).filter(Element.id == form.parent_id).one_or_none()
+        if new_element.element_type_id == 2 and new_element.content is None:
+            raise ValueError(REQUIRED_CONTENT)
 
-        if parent is None:
-            raise ValueError(FOLDER_NOT_FOUND)
+        if new_element.parent_id is not None:
+            parent = session.query(Element).filter(Element.id == new_element.parent_id).one_or_none()
+
+            if parent is None:
+                raise ValueError(FOLDER_NOT_FOUND)
         
         matching_element = session.query(Element).filter(
             Element.parent_id == new_element.parent_id,

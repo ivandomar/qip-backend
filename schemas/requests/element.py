@@ -1,10 +1,11 @@
-from pydantic import BaseModel
-from typing import List
+from pydantic import BaseModel, validator
+from typing import  List
+
 
 # TODO: cross validate content against element type
 class NewElementRequestSchema(BaseModel):
     title: str
-    content: str
+    content: str = None
     element_type_id: int
     parent_id: int = None
 
