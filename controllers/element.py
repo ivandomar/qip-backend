@@ -26,9 +26,9 @@ def add(form: NewElementRequestSchema):
         matching_element = session.query(Element).filter(
             Element.parent_id == new_element.parent_id,
             Element.title == new_element.title
-        ).first()
+        ).one_or_none()
 
-        if matching_element is None:
+        if matching_element is not None:
             raise AttributeError(DUPLICATED_ELEMENT)
 
         session.add(new_element)
