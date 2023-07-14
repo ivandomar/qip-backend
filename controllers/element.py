@@ -8,8 +8,8 @@ from models.element import Element
 from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema, RemoveElementRequestSchema
 
 
-def add(form: NewElementRequestSchema):
-    new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
+def add(body: NewElementRequestSchema):
+    new_element = Element(body.title, body.content, body.element_type_id, body.parent_id)
     
     try:
         session = Session()
