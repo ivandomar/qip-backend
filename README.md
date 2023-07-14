@@ -4,12 +4,12 @@ Aplicação backend do meu MVP da sprint de desenvolvimento full-stack da minha 
 ---
 ## Como executar 
 
-Instalar dependências (as mesmas estão descritas no arquivo `requirements.txt`).
+1. Instalar dependências (as mesmas estão descritas no arquivo `requirements.txt`).
 ```
 $ pip install -r requirements.txt
 ```
 
-Dispnibilizar a API
+2. Dispnibilizar a API
 ```
 $ flask run --host 0.0.0.0 --port 5000
 ```
