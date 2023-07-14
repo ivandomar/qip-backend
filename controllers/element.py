@@ -65,7 +65,7 @@ def edit(path: EditElementIdRequestSchema, body: EditElementRequestSchema):
             else:
                 content = body.content
         
-        new_data = {'title': title, 'content': content}
+        new_data = {'title': title, 'content': content, 'updated_at': datetime.now()}
 
         session.query(Element).filter(Element.id == id).update(new_data)
 
