@@ -1,12 +1,12 @@
 from constants.error_messages import DUPLICATED_ELEMENT, FOLDER_NOT_FOUND, GENERAL_ERROR, REQUIRED_CONTENT
 from constants.http_statuses import OK, CREATED, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
+from datetime import datetime
+from flask import request
 from formatters.element import format_element_response, format_element_list_response
 from models.element import Element
 from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema, RemoveElementRequestSchema
 
-from datetime import datetime
-from flask import request
 
 def add(form: NewElementRequestSchema):
     new_element = Element(form.title, form.content, form.element_type_id, form.parent_id)
@@ -90,16 +90,16 @@ def get(form: GetElementRequestSchema):
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
 
-def remove(form: RemoveElementRequestSchema):
-    id = form.id
-    
+def remove(path: RemoveElementRequestSchema):
+    id = path.id
+
     try:
         session = Session()
         session.query(Element).filter(Element.id == id).update({'deleted_at': datetime.now()})
         session.commit()
         session.close()
         
-        return None, OK
+        return '', OK
 
     except Exception as e:        
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
