@@ -44,8 +44,8 @@ def add(form: NewElementRequestSchema):
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
 
-def get_by_folder(form: ListElementRequestSchema):
-    parent_id = form.parent_id
+def get_by_folder(path: ListElementRequestSchema):
+    parent_id = path.parent_id
     
     try:
         session = Session()
@@ -72,8 +72,8 @@ def get_by_folder(form: ListElementRequestSchema):
         return {"mesage": str(e)}, SYNTAX_ERROR
     
 
-def get(form: GetElementRequestSchema):
-    id = form.id
+def get(path: GetElementRequestSchema):
+    id = path.id
     
     try:
         session = Session()
