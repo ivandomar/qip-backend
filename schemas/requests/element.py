@@ -8,6 +8,14 @@ class NewElementRequestSchema(BaseModel):
     parent_id: int = None
 
 
+class EditElementIdRequestSchema(BaseModel):
+    id: int
+
+class EditElementRequestSchema(BaseModel):
+    title: str
+    content: str = None
+
+
 class ListElementRequestSchema(BaseModel):
     parent_id: int = None
 

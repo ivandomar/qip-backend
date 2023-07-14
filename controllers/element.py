@@ -1,11 +1,11 @@
-from constants.error_messages import DUPLICATED_ELEMENT, FOLDER_NOT_FOUND, GENERAL_ERROR, REQUIRED_CONTENT
+from constants.error_messages import DUPLICATED_ELEMENT, ELEMENT_NOT_FOUND, FOLDER_NOT_FOUND, GENERAL_ERROR, REQUIRED_CONTENT
 from constants.http_statuses import OK, CREATED, SEMANTIC_ERROR, SYNTAX_ERROR
 from database import Session
 from datetime import datetime
 from flask import request
 from formatters.element import format_element_response, format_element_list_response
 from models.element import Element
-from schemas.requests.element import GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema, RemoveElementRequestSchema
+from schemas.requests.element import EditElementRequestSchema, EditElementIdRequestSchema, GetElementRequestSchema, ListElementRequestSchema, NewElementRequestSchema, RemoveElementRequestSchema
 
 
 def add(body: NewElementRequestSchema):
@@ -43,6 +43,45 @@ def add(body: NewElementRequestSchema):
     except Exception as e:        
         return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
     
+
+def edit(path: EditElementIdRequestSchema, body: EditElementRequestSchema):
+    id = path.id
+
+    try:
+        session = Session()
+
+        element = session.query(Element).filter(Element.id == id).one_or_none()
+
+        if element is None:
+            raise ValueError(ELEMENT_NOT_FOUND)
+        
+        title = body.title
+
+        if (element.element_type_id == 1):
+            content = None
+        else:
+            if (body.content is None):
+                raise ValueError(REQUIRED_CONTENT)
+            else:
+                content = body.content
+        
+        new_data = {'title': title, 'content': content}
+
+        session.query(Element).filter(Element.id == id).update(new_data)
+
+        new_element = session.query(Element).filter(Element.id == id).one_or_none()
+
+        session.commit()
+        session.close()
+        
+        return format_element_response(new_element), OK
+
+    except ValueError as e:
+        return {"mesage": str(e)}, SEMANTIC_ERROR
+
+    except Exception as e:        
+        return {"mesage": GENERAL_ERROR}, SYNTAX_ERROR
+
 
 def get_by_folder(path: ListElementRequestSchema):
     parent_id = path.parent_id

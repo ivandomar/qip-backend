@@ -1,7 +1,7 @@
 from flask_openapi3 import APIBlueprint, Tag
 
 from constants.http_statuses import OK, SEMANTIC_ERROR, SYNTAX_ERROR
-from controllers.element import add, get, get_by_folder, remove
+from controllers.element import add, edit, get, get_by_folder, remove
 from schemas.responses.element import ElementResponseSchema, ElementListResponseSchema
 from schemas.responses.general import ErrorResponseSchema
 
@@ -41,6 +41,17 @@ element_blueprint.delete(
         str(SYNTAX_ERROR): ErrorResponseSchema
         }
 )(remove)
+
+element_blueprint.patch(
+    '/<id>',
+    tags=[element_tag],
+    summary='Edits an element',
+    responses={
+        str(OK): ElementResponseSchema,
+        str(SEMANTIC_ERROR): ErrorResponseSchema,
+        str(SYNTAX_ERROR): ErrorResponseSchema
+        }
+)(edit)
 
 element_blueprint.post(
     '/',
