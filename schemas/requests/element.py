@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
-
 class NewElementRequestSchema(BaseModel):
     title: str
     content: str = None
@@ -17,7 +16,7 @@ class EditElementRequestSchema(BaseModel):
 
 
 class ListElementRequestSchema(BaseModel):
-    parent_id: int = None
+    parent_id: int | str = 'null'
 
 
 class GetElementRequestSchema(BaseModel):

@@ -85,6 +85,9 @@ def edit(path: EditElementIdRequestSchema, body: EditElementRequestSchema):
 
 def get_by_folder(path: ListElementRequestSchema):
     parent_id = path.parent_id
+
+    if (parent_id == 'null'):
+        parent_id = None
     
     try:
         session = Session()
