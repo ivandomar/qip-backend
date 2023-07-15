@@ -21,7 +21,7 @@ element_blueprint.get(
 )(get)
 
 element_blueprint.get(
-    '/<id>/elements',
+    '/<parent_id>/elements',
     tags=[element_tag],
     summary='Gets elements of the specified parent element',
     responses={
