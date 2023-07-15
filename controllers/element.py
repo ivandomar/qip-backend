@@ -18,14 +18,18 @@ def add(body: NewElementRequestSchema):
             raise ValueError(REQUIRED_CONTENT)
 
         if new_element.parent_id is not None:
-            parent = session.query(Element).filter(Element.id == new_element.parent_id).one_or_none()
+            parent = session.query(Element).filter(
+                Element.id == new_element.parent_id,
+                Element.deleted_at == None
+                ).one_or_none()
 
             if parent is None:
                 raise ValueError(FOLDER_NOT_FOUND)
         
         matching_element = session.query(Element).filter(
             Element.parent_id == new_element.parent_id,
-            Element.title == new_element.title
+            Element.title == new_element.title,
+            Element.deleted_at == None
         ).one_or_none()
 
         if matching_element is not None:
