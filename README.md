@@ -1,17 +1,17 @@
 # qip-backend
-Aplicação backend do meu MVP da sprint de desenvolvimento full-stack da minha pós-graduação 
+Pyhton Flask RESTful API for personal notes management
 
 ---
-## Como executar 
+## Usage
 
-1. Instalar dependências (as mesmas estão descritas no arquivo `requirements.txt`).
+1. Install deps
 ```
 $ pip install -r requirements.txt
 ```
 
-2. Dispnibilizar a API
+2. Publish API
 ```
 $ flask run --host 0.0.0.0 --port 5000
 ```
 
-> A documentação da APi pode ser visualizada acessando http://localhost:5000 (se a porta usada para iniciar o flask foi a 5000)
+> API docs can be accessed at http://localhost:5000 (if port 5000 was used to run the flask app)
